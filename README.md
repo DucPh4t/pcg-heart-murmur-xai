@@ -8,10 +8,11 @@ The project contains a recording-level ResNet18-FGA baseline and a patient-level
 multiple-instance learning (MIL) extension that aggregates all available
 recording locations for each patient.
 
-This repository extends earlier conference work presented at the 2nd EAI
-International Conference on Responsible Artificial Intelligence and Data Science
-(EAI RAIDS 2026), titled "An Explainable Attention-Based Deep Learning
-Framework for Pediatric Heart Murmur Screening Using Phonocardiograms."
+> *This repository extends earlier conference work accepted at the 2nd EAI
+> International Conference on Responsible Artificial Intelligence and Data
+> Science ([EAI RAIDS 2026](https://raids.eai-conferences.org/2026/accepted-papers/)),
+> titled "An Explainable Attention-Based Deep Learning Framework for Pediatric
+> Heart Murmur Screening Using Phonocardiograms."*
 
 ## Highlights
 
