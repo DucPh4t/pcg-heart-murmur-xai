@@ -8,6 +8,11 @@ The project contains a recording-level ResNet18-FGA baseline and a patient-level
 multiple-instance learning (MIL) extension that aggregates all available
 recording locations for each patient.
 
+This repository extends earlier conference work presented at the 2nd EAI
+International Conference on Responsible Artificial Intelligence and Data Science
+(EAI RAIDS 2026), titled "An Explainable Attention-Based Deep Learning
+Framework for Pediatric Heart Murmur Screening Using Phonocardiograms."
+
 ## Highlights
 
 - Patient-level split and evaluation to avoid recording leakage.
@@ -24,14 +29,21 @@ Internal held-out patient-level split with 189 patients
 (`Absent=139`, `Present=36`, `Unknown=14`). These are not official hidden
 test-set results.
 
-| Method | Level | WA (%) | Present Sens. (%) | Absent Spec. (%) | Unknown Recall (%) | Acc. (%) | Macro-F1 (%) |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| FGA baseline | Patient | 77.56 | 80.56 | 92.81 | 14.29 | 84.66 | 63.60 |
-| Patient MIL | Patient | 77.84 | 80.56 | 91.37 | 21.43 | 84.13 | 65.24 |
+| Method | Level | WA (%) | Present Sens. (%) | Absent Spec. (%) | Unknown Recall (%) |
+|---|---:|---:|---:|---:|---:|
+| FGA baseline | Patient | 77.56 | 80.56 | 92.81 | 14.29 |
+| Patient MIL | Patient | 77.84 | 80.56 | 91.37 | 21.43 |
 
 MIL gives a modest improvement in patient-level weighted accuracy and Unknown
 recall, while slightly reducing Absent specificity. Unknown support is small, so
 Unknown results should be interpreted with confidence intervals.
+
+Additional patient-level metrics:
+
+| Method | Acc. (%) | Macro-F1 (%) |
+|---|---:|---:|
+| FGA baseline | 84.66 | 63.60 |
+| Patient MIL | 84.13 | 65.24 |
 
 Patient MIL bootstrap confidence intervals:
 
