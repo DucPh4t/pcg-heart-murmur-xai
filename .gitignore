@@ -1,0 +1,35 @@
+# Local environments and OS files
+.DS_Store
+.venv/
+__pycache__/
+*.py[cod]
+
+# Dataset files
+data/raw/
+
+# Model artifacts
+*.pth
+norm_stats*.npz
+
+# Large archives and local transfer bundles
+*.zip
+
+# Experiment outputs
+results*.json
+xai*.json
+confusion_matrix*.png
+mil_attention_*.csv
+SHAP_Figures_3Class/
+SHAP_Figures_Errors/
+XAI_Figures_3Class/
+
+# Keep curated public documentation figures.
+!docs/
+!docs/figures/
+!docs/figures/*.png
+
+# Internal working notes and backups
+backup/
+update.md
+COLAB_SETUP.md
+MIL_NOTES.md
