@@ -130,7 +130,7 @@ def main():
     fold_stats = []
     for f in range(NUM_FOLDS):
         m = get_model(num_classes=3).to(device)
-        m.load_state_dict(torch.load(os.path.join(cfg.PROJECT_ROOT, f"{cfg.MODEL_PREFIX}_fold{f}.pth"), map_location=device))
+        m.load_state_dict(torch.load(cfg.get_checkpoint_path(f"{cfg.MODEL_PREFIX}_fold{f}.pth"), map_location=device))
         m.eval()
         models.append(m)
         fold_stats.append(load_fold_norm_stats(f))
@@ -191,7 +191,8 @@ def main():
             )
 
     # Save machine-readable overlap metrics for later reporting.
-    with open(os.path.join(cfg.PROJECT_ROOT, cfg.XAI_FILENAME), 'w') as f:
+    os.makedirs(cfg.RESULTS_DIR, exist_ok=True)
+    with open(os.path.join(cfg.RESULTS_DIR, cfg.XAI_FILENAME), 'w') as f:
         json.dump([
             {
                 'file': r['file'],

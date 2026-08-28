@@ -94,7 +94,8 @@ def train_one_fold(fold_idx, train_idx, val_idx, train_ds_full, val_ds_full, dev
     val_ds   = Subset(val_ds_full,   val_idx)
 
     train_labels = [train_ds_full.file_list[i][1] for i in train_idx]
-    stats_path = os.path.join(cfg.PROJECT_ROOT, f"{cfg.NORM_STATS_PREFIX}{fold_idx}.npz")
+    os.makedirs(cfg.CHECKPOINT_DIR, exist_ok=True)
+    stats_path = cfg.get_checkpoint_path(f"{cfg.NORM_STATS_PREFIX}{fold_idx}.npz")
     if os.path.exists(stats_path):
         norm_stats = load_normalization_stats(stats_path)
     else:
@@ -204,9 +205,10 @@ def train_one_fold(fold_idx, train_idx, val_idx, train_ds_full, val_ds_full, dev
             best_metrics = m
             best_recording_metrics = record_m
             patience_ctr = 0
+            os.makedirs(cfg.CHECKPOINT_DIR, exist_ok=True)
             torch.save(
                 model.state_dict(),
-                os.path.join(cfg.PROJECT_ROOT, f"{cfg.MODEL_PREFIX}_fold{fold_idx}.pth"),
+                os.path.join(cfg.CHECKPOINT_DIR, f"{cfg.MODEL_PREFIX}_fold{fold_idx}.pth"),
             )
         else:
             patience_ctr += 1

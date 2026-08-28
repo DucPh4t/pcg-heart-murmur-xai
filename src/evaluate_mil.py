@@ -34,7 +34,7 @@ from model import get_patient_mil_model
 
 
 def mil_norm_stats_path(fold_idx):
-    return os.path.join(cfg.PROJECT_ROOT, f"{cfg.MIL_NORM_STATS_PREFIX}{fold_idx}.npz")
+    return cfg.get_checkpoint_path(f"{cfg.MIL_NORM_STATS_PREFIX}{fold_idx}.npz")
 
 
 def load_mil_norm_stats(fold_idx):
@@ -48,7 +48,7 @@ def load_mil_norm_stats(fold_idx):
 
 
 def load_mil_model(fold_idx, device):
-    model_path = os.path.join(cfg.PROJECT_ROOT, f"{cfg.MIL_MODEL_PREFIX}_fold{fold_idx}.pth")
+    model_path = cfg.get_checkpoint_path(f"{cfg.MIL_MODEL_PREFIX}_fold{fold_idx}.pth")
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Missing MIL checkpoint: {model_path}")
     model = get_patient_mil_model(num_classes=cfg.NUM_CLASSES).to(device)
@@ -222,7 +222,8 @@ def main():
             f"(A/P/U={m['N_A']}/{m['N_P']}/{m['N_U']})"
         )
 
-    cm_path = os.path.join(cfg.PROJECT_ROOT, cfg.MIL_CONFUSION_MATRIX_FILENAME)
+    os.makedirs(cfg.RESULTS_DIR, exist_ok=True)
+    cm_path = os.path.join(cfg.RESULTS_DIR, cfg.MIL_CONFUSION_MATRIX_FILENAME)
     plot_confusion_matrix(
         test_labels,
         test_probs,
@@ -275,7 +276,7 @@ def main():
         },
     }
 
-    json_path = os.path.join(cfg.PROJECT_ROOT, cfg.MIL_RESULTS_FILENAME)
+    json_path = os.path.join(cfg.RESULTS_DIR, cfg.MIL_RESULTS_FILENAME)
     with open(json_path, "w") as f:
         json.dump(out, f, indent=2)
 

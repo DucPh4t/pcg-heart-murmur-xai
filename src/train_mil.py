@@ -37,7 +37,8 @@ CV_FOLDS = NUM_FOLDS
 
 
 def mil_norm_stats_path(fold_idx):
-    return os.path.join(cfg.PROJECT_ROOT, f"{cfg.MIL_NORM_STATS_PREFIX}{fold_idx}.npz")
+    os.makedirs(cfg.CHECKPOINT_DIR, exist_ok=True)
+    return cfg.get_checkpoint_path(f"{cfg.MIL_NORM_STATS_PREFIX}{fold_idx}.npz")
 
 
 def make_patient_loader(recording_dataset, patient_ids, patient_indices_map, patient_label_map, shuffle):
@@ -150,9 +151,10 @@ def train_one_fold(fold_idx, train_patients, val_patients, train_ds_full, val_ds
             best_wa = wa
             best_metrics = metrics
             patience_ctr = 0
+            os.makedirs(cfg.CHECKPOINT_DIR, exist_ok=True)
             torch.save(
                 model.state_dict(),
-                os.path.join(cfg.PROJECT_ROOT, f"{cfg.MIL_MODEL_PREFIX}_fold{fold_idx}.pth"),
+                os.path.join(cfg.CHECKPOINT_DIR, f"{cfg.MIL_MODEL_PREFIX}_fold{fold_idx}.pth"),
             )
         else:
             patience_ctr += 1

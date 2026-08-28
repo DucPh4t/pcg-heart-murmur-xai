@@ -27,7 +27,7 @@ LOCATIONS = list(cfg.LOCATION_LABELS.keys())
 
 
 def mil_norm_stats_path(fold_idx):
-    return os.path.join(cfg.PROJECT_ROOT, f"{cfg.MIL_NORM_STATS_PREFIX}{fold_idx}.npz")
+    return cfg.get_checkpoint_path(f"{cfg.MIL_NORM_STATS_PREFIX}{fold_idx}.npz")
 
 
 def load_mil_norm_stats(fold_idx):
@@ -35,7 +35,7 @@ def load_mil_norm_stats(fold_idx):
 
 
 def load_mil_model(fold_idx, device):
-    model_path = os.path.join(cfg.PROJECT_ROOT, f"{cfg.MIL_MODEL_PREFIX}_fold{fold_idx}.pth")
+    model_path = cfg.get_checkpoint_path(f"{cfg.MIL_MODEL_PREFIX}_fold{fold_idx}.pth")
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Missing MIL checkpoint: {model_path}")
     model = get_patient_mil_model(num_classes=cfg.NUM_CLASSES).to(device)
@@ -168,12 +168,13 @@ def main():
     long_df = pd.DataFrame(long_rows)
     summary_df = pd.DataFrame(summary_rows)
 
+    os.makedirs(cfg.RESULTS_DIR, exist_ok=True)
     long_path = os.path.join(
-        cfg.PROJECT_ROOT,
+        cfg.RESULTS_DIR,
         f"mil_attention_recordings_{cfg.MIL_EXPERIMENT_NAME}.csv",
     )
     summary_path = os.path.join(
-        cfg.PROJECT_ROOT,
+        cfg.RESULTS_DIR,
         f"mil_attention_patients_{cfg.MIL_EXPERIMENT_NAME}.csv",
     )
     long_df.to_csv(long_path, index=False)

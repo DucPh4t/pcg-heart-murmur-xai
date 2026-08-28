@@ -28,7 +28,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.ba
 
 CLASS_NAMES = {0: "Absent", 1: "Present", 2: "Unknown"}
 
-OUT_DIR = os.path.join(cfg.PROJECT_ROOT, "XAI_Figures_3Class")
+OUT_DIR = os.path.join(cfg.RESULTS_DIR, "XAI_Figures_3Class")
 for c in CLASS_NAMES.values():
     os.makedirs(os.path.join(OUT_DIR, c), exist_ok=True)
 
@@ -158,7 +158,7 @@ def main():
     print("Loading folds...")
     for f in range(NUM_FOLDS):
         m = get_model(num_classes=3).to(device)
-        m.load_state_dict(torch.load(os.path.join(cfg.PROJECT_ROOT, f"{cfg.MODEL_PREFIX}_fold{f}.pth"), map_location=device))
+        m.load_state_dict(torch.load(cfg.get_checkpoint_path(f"{cfg.MODEL_PREFIX}_fold{f}.pth"), map_location=device))
         m.eval()
         models.append(m)
         fold_stats.append(load_fold_norm_stats(f))

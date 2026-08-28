@@ -36,7 +36,7 @@ PATIENT_AGGREGATION_METHODS = ["mean", "max_present", "noisy_or_present"]
 
 
 def load_model(fold_idx, device):
-    model_path = os.path.join(cfg.PROJECT_ROOT, f"{cfg.MODEL_PREFIX}_fold{fold_idx}.pth")
+    model_path = cfg.get_checkpoint_path(f"{cfg.MODEL_PREFIX}_fold{fold_idx}.pth")
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Missing checkpoint: {model_path}")
     model = get_model(num_classes=cfg.NUM_CLASSES).to(device)
@@ -46,7 +46,7 @@ def load_model(fold_idx, device):
 
 
 def load_fold_norm_stats(fold_idx):
-    stats_path = os.path.join(cfg.PROJECT_ROOT, f"{cfg.NORM_STATS_PREFIX}{fold_idx}.npz")
+    stats_path = cfg.get_checkpoint_path(f"{cfg.NORM_STATS_PREFIX}{fold_idx}.npz")
     if not os.path.exists(stats_path):
         raise FileNotFoundError(
             f"Missing normalization stats for fold {fold_idx}: {stats_path}. "
@@ -309,7 +309,8 @@ def main():
         )
 
     print("\n[4/4] Saving artifacts")
-    cm_path = os.path.join(cfg.PROJECT_ROOT, cfg.CONFUSION_MATRIX_FILENAME)
+    os.makedirs(cfg.RESULTS_DIR, exist_ok=True)
+    cm_path = os.path.join(cfg.RESULTS_DIR, cfg.CONFUSION_MATRIX_FILENAME)
     plot_confusion_matrix(
         test_patient_labels,
         test_patient_probs,
@@ -384,7 +385,7 @@ def main():
         "patient_level_by_aggregation": patient_aggregation_results,
     }
 
-    json_path = os.path.join(cfg.PROJECT_ROOT, cfg.RESULTS_FILENAME)
+    json_path = os.path.join(cfg.RESULTS_DIR, cfg.RESULTS_FILENAME)
     with open(json_path, "w") as f:
         json.dump(out, f, indent=2)
 

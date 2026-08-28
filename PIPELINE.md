@@ -62,8 +62,8 @@ binary 2-class labels.
 │ Sampler: none                                                         │
 │ Checkpoint selection: best validation patient-level WA                 │
 │ Saved artifacts:                                                      │
-│ - best_model_first10_D_patientckpt_focal_g2_unknown4_fold*.pth        │
-│ - norm_stats_first10_D_patientckpt_focal_g2_unknown4_fold*.npz        │
+│ - checkpoints/best_model_first10_D_patientckpt_focal_g2_unknown4_fold*.pth
+│ - checkpoints/norm_stats_first10_D_patientckpt_focal_g2_unknown4_fold*.npz
 └──────────────────────────────────────────────────────────────────────┘
                                 │
                                 v
@@ -92,8 +92,8 @@ binary 2-class labels.
 │ Metrics: WA, Present sensitivity, Absent specificity, Unknown recall  │
 │ Uncertainty: bootstrap confidence intervals                           │
 │ Saved artifacts:                                                      │
-│ - results_first10_D_patientckpt_focal_g2_unknown4.json                │
-│ - confusion_matrix_first10_D_patientckpt_focal_g2_unknown4.png        │
+│ - results/results_first10_D_patientckpt_focal_g2_unknown4.json        │
+│ - results/confusion_matrix_first10_D_patientckpt_focal_g2_unknown4.png│
 └──────────────────────────────────────────────────────────────────────┘
                                 │
                                 v
@@ -103,7 +103,7 @@ binary 2-class labels.
 │ Grad-CAM++: fold-specific normalized inputs for ensemble XAI          │
 │ SHAP: fixed single fold to keep one stable input normalization space  │
 │ XAI caution: regenerate figures after each experiment config change   │
-│ Saved artifact: xai_first10_D_patientckpt_focal_g2_unknown4.json      │
+│ Saved artifact: results/xai_first10_D_patientckpt_focal_g2_unknown4.json
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -138,13 +138,13 @@ LOSS_WEIGHTS = [1, 5, 4]
 
 Expected artifacts:
 
-- `best_model_first10_D_patientckpt_focal_g2_unknown4_fold0.pth` ...
-  `best_model_first10_D_patientckpt_focal_g2_unknown4_fold4.pth`
-- `norm_stats_first10_D_patientckpt_focal_g2_unknown4_fold0.npz` ...
-  `norm_stats_first10_D_patientckpt_focal_g2_unknown4_fold4.npz`
-- `results_first10_D_patientckpt_focal_g2_unknown4.json`
-- `confusion_matrix_first10_D_patientckpt_focal_g2_unknown4.png`
-- `xai_first10_D_patientckpt_focal_g2_unknown4.json`
+- `checkpoints/best_model_first10_D_patientckpt_focal_g2_unknown4_fold0.pth` ...
+  `checkpoints/best_model_first10_D_patientckpt_focal_g2_unknown4_fold4.pth`
+- `checkpoints/norm_stats_first10_D_patientckpt_focal_g2_unknown4_fold0.npz` ...
+  `checkpoints/norm_stats_first10_D_patientckpt_focal_g2_unknown4_fold4.npz`
+- `results/results_first10_D_patientckpt_focal_g2_unknown4.json`
+- `results/confusion_matrix_first10_D_patientckpt_focal_g2_unknown4.png`
+- `results/xai_first10_D_patientckpt_focal_g2_unknown4.json`
 
 Multi-crop is no longer the active main protocol. It can be used as an ablation
 by changing the config preset.

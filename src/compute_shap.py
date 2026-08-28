@@ -58,14 +58,14 @@ FREQ_BANDS = {
     'Upper (600-800 Hz)':       (600, 800),
 }
 
-OUT_DIR = os.path.join(cfg.PROJECT_ROOT, "SHAP_Figures_3Class")
+OUT_DIR = os.path.join(cfg.RESULTS_DIR, "SHAP_Figures_3Class")
 os.makedirs(OUT_DIR, exist_ok=True)
 
 device = torch.device("cpu")  # SHAP hooks incompatible with MPS
 
 
 def load_entropy_threshold(level="patient"):
-    results_path = os.path.join(cfg.PROJECT_ROOT, cfg.RESULTS_FILENAME)
+    results_path = cfg.get_results_path(cfg.RESULTS_FILENAME)
     if not os.path.exists(results_path):
         return None
     with open(results_path) as f:
@@ -75,7 +75,7 @@ def load_entropy_threshold(level="patient"):
 
 
 def load_patient_aggregation_config():
-    results_path = os.path.join(cfg.PROJECT_ROOT, cfg.RESULTS_FILENAME)
+    results_path = cfg.get_results_path(cfg.RESULTS_FILENAME)
     if not os.path.exists(results_path):
         return "mean", load_entropy_threshold("patient")
     with open(results_path) as f:
@@ -365,7 +365,7 @@ def main():
     print(f"Loading fold {EXPLAIN_FOLD} model for SHAP...")
     m = get_model(num_classes=cfg.NUM_CLASSES).to(device)
     m.load_state_dict(torch.load(
-        os.path.join(cfg.PROJECT_ROOT, f"{cfg.MODEL_PREFIX}_fold{EXPLAIN_FOLD}.pth"),
+        cfg.get_checkpoint_path(f"{cfg.MODEL_PREFIX}_fold{EXPLAIN_FOLD}.pth"),
         map_location=device))
     m.eval()
     models.append(m)

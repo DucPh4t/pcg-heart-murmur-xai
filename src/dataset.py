@@ -1,11 +1,8 @@
 """
-Heart murmur dataset: Fixed augmentation flow to prevent data leakage.
-
-Key Changes:
-1. NO pre-augmentation in __init__
-2. Augmentation is applied ON-THE-FLY in __getitem__
-3. Training indices are passed separately to control when to augment
-4. Oversampling is handled at DataLoader level, not dataset level
+dataset.py
+==========
+Dataset loading, audio preprocessing, mel-spectrogram extraction,
+normalization, data augmentation, and MIL bag construction for heart murmur detection.
 """
 
 import os

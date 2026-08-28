@@ -11,20 +11,44 @@ Central config for the 3-class FGA experiment (Present / Unknown / Absent).
 
 import os
 
-# Paths (same as main config)
-BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(BASE_DIR)
-DATA_DIR     = os.path.join(PROJECT_ROOT, "data", "raw", "training_data")
-CSV_PATH     = os.path.join(PROJECT_ROOT, "data", "raw", "training_data.csv")
+# Paths
+BASE_DIR       = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT   = os.path.dirname(BASE_DIR)
+DATA_DIR       = os.path.join(PROJECT_ROOT, "data", "raw", "training_data")
+CSV_PATH       = os.path.join(PROJECT_ROOT, "data", "raw", "training_data.csv")
+CHECKPOINT_DIR = os.path.join(PROJECT_ROOT, "checkpoints")
+RESULTS_DIR    = os.path.join(PROJECT_ROOT, "results")
 
-# Audio Parameters (same)
+
+def get_checkpoint_path(filename):
+    """Find a checkpoint/norm file in CHECKPOINT_DIR or fallback to PROJECT_ROOT."""
+    p = os.path.join(CHECKPOINT_DIR, filename)
+    if os.path.exists(p):
+        return p
+    root_p = os.path.join(PROJECT_ROOT, filename)
+    if os.path.exists(root_p):
+        return root_p
+    return p
+
+
+def get_results_path(filename):
+    """Find a results/XAI file in RESULTS_DIR or fallback to PROJECT_ROOT."""
+    p = os.path.join(RESULTS_DIR, filename)
+    if os.path.exists(p):
+        return p
+    root_p = os.path.join(PROJECT_ROOT, filename)
+    if os.path.exists(root_p):
+        return root_p
+    return p
+
+# Audio Parameters
 SAMPLE_RATE  = 4000
 DURATION     = 10.0
 NUM_SAMPLES  = int(SAMPLE_RATE * DURATION)
 BANDPASS_LOW  = 25
 BANDPASS_HIGH = 600
 
-# Spectrogram Parameters (same)
+# Spectrogram Parameters
 N_FFT        = 256
 HOP_LENGTH   = 64
 N_MELS       = 96
@@ -80,7 +104,7 @@ LEARNING_RATE     = 1e-4
 NUM_EPOCHS        = 25       # Slightly more epochs for 3 classes
 NUM_WORKERS       = 0        # Keep 0 for portable runs without shared-memory issues
 
-# Augmentation (same as main)
+# Data Augmentation
 AUGMENTATION_ENABLED   = True
 AUGMENTATION_MULTIPLIER = 2
 TIME_SHIFT_ENABLED     = True

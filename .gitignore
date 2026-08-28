@@ -8,13 +8,16 @@ __pycache__/
 data/raw/
 
 # Model artifacts
+checkpoints/
 *.pth
 norm_stats*.npz
 
 # Large archives and local transfer bundles
+archives/
 *.zip
 
 # Experiment outputs
+results/
 results*.json
 xai*.json
 confusion_matrix*.png
