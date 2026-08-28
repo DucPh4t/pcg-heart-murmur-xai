@@ -10,25 +10,48 @@ import torch.nn.functional as F
 from sklearn.metrics import classification_report
 from torch.utils.data import DataLoader, Subset
 
-SRC_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, SRC_DIR)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.dirname(SCRIPT_DIR)
+CORE_DIR = os.path.join(SRC_DIR, "core")
 
-import config as cfg
-from dataset import HeartMurmurDataset, get_patient_info, load_normalization_stats
-from experiment_utils import (
-    NUM_FOLDS,
-    RANDOM_STATE,
-    aggregate_patient_probs,
-    bootstrap_metric_ci,
-    compute_physionet_wa,
-    get_or_create_split,
-    indices_for_patients,
-    predict_with_unknown_threshold,
-    seed_worker,
-    set_seed,
-    sweep_entropy_threshold,
-)
-from model import get_model
+for p in [SRC_DIR, CORE_DIR, SCRIPT_DIR]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
+try:
+    from core import config as cfg
+    from core.dataset import HeartMurmurDataset, get_patient_info, load_normalization_stats
+    from core.experiment_utils import (
+        NUM_FOLDS,
+        RANDOM_STATE,
+        aggregate_patient_probs,
+        bootstrap_metric_ci,
+        compute_physionet_wa,
+        get_or_create_split,
+        indices_for_patients,
+        predict_with_unknown_threshold,
+        seed_worker,
+        set_seed,
+        sweep_entropy_threshold,
+    )
+    from core.model import get_model
+except (ImportError, ValueError):
+    import config as cfg
+    from dataset import HeartMurmurDataset, get_patient_info, load_normalization_stats
+    from experiment_utils import (
+        NUM_FOLDS,
+        RANDOM_STATE,
+        aggregate_patient_probs,
+        bootstrap_metric_ci,
+        compute_physionet_wa,
+        get_or_create_split,
+        indices_for_patients,
+        predict_with_unknown_threshold,
+        seed_worker,
+        set_seed,
+        sweep_entropy_threshold,
+    )
+    from model import get_model
 
 
 CLASS_NAMES = ["Absent", "Present", "Unknown"]

@@ -111,24 +111,28 @@ Curated figures are stored in `docs/figures/`:
 ```text
 pcg-heart-murmur-xai/
 ├── src/
-│   ├── config.py                 # Central experiment configuration
-│   ├── dataset.py                # Dataset loading, mel-spectrogram, MIL bags
-│   ├── model.py                  # ResNet18-FGA and Patient-Level MIL architectures
-│   ├── train.py                  # 5-fold baseline training
-│   ├── evaluate.py               # Baseline inference & patient evaluation
-│   ├── train_mil.py              # Patient-level MIL 5-fold training
-│   ├── evaluate_mil.py           # Patient-level MIL inference & evaluation
-│   ├── export_mil_attention.py   # MIL attention CSV export
-│   ├── compute_shap.py           # SHAP analysis for correct cases
-│   ├── compute_shap_errors.py    # SHAP analysis for misclassifications
-│   ├── compute_xai.py            # Grad-CAM++ overlap metrics
-│   ├── generate_xai.py           # Grad-CAM++ visualization export
-│   ├── experiment_utils.py       # Metrics, split management, seed utilities
-│   └── utils.py                  # Loss functions and DSP helpers
+│   ├── core/                     # Core building blocks (DSP, models, datasets, configs)
+│   │   ├── config.py             # Central experiment configuration
+│   │   ├── dataset.py            # Dataset loading, mel-spectrogram, MIL bags
+│   │   ├── model.py              # ResNet18-FGA and Patient-Level MIL architectures
+│   │   ├── experiment_utils.py   # Metrics, split management, seed utilities
+│   │   └── utils.py              # Loss functions and DSP helpers
+│   ├── baseline/                 # Recording-level FGA baseline pipeline
+│   │   ├── train.py              # 5-fold baseline training
+│   │   ├── evaluate.py           # Baseline inference & patient evaluation
+│   │   └── compare_uncertainty.py# Entropy vs energy uncertainty calibration
+│   ├── mil/                      # Patient-level Multiple-Instance Learning pipeline
+│   │   ├── train_mil.py          # Patient-level MIL 5-fold training
+│   │   ├── evaluate_mil.py       # Patient-level MIL inference & evaluation
+│   │   └── export_mil_attention.py # MIL attention CSV export
+│   └── xai/                      # Explainability & interpretability suite
+│       ├── compute_shap.py       # SHAP analysis for correct cases
+│       ├── compute_shap_errors.py# SHAP analysis for misclassifications
+│       ├── compute_xai.py        # Grad-CAM++ overlap metrics
+│       └── generate_xai.py       # Grad-CAM++ visualization export
 ├── checkpoints/                  # Trained model checkpoints (*.pth) and norm stats (*.npz)
 ├── results/                      # Evaluation JSONs, confusion matrices, and XAI figures
 ├── docs/figures/                 # Curated figures for public documentation
-├── PIPELINE.md                   # Comprehensive pipeline specification
 ├── requirements.txt              # Python package dependencies
 ├── splits_seed42.json            # Deterministic patient-level split definition
 └── .gitignore                    # Artifact exclusion rules
@@ -176,38 +180,38 @@ data/
 
 ```bash
 # Train 5-fold baseline models
-python src/train.py
+python src/baseline/train.py
 
 # Evaluate on test set with OOF entropy calibration
-python src/evaluate.py
+python src/baseline/evaluate.py
 
 # Compare uncertainty strategies (Entropy vs Energy)
-python src/compare_uncertainty.py
+python src/baseline/compare_uncertainty.py
 ```
 
 ### 2. Patient-Level Multiple-Instance Learning (MIL)
 
 ```bash
 # Train 5-fold Patient-MIL models
-python src/train_mil.py
+python src/mil/train_mil.py
 
 # Evaluate Patient-MIL
-python src/evaluate_mil.py
+python src/mil/evaluate_mil.py
 
 # Export recording attention weights
-python src/export_mil_attention.py
+python src/mil/export_mil_attention.py
 ```
 
 ### 3. Explainability (SHAP & Grad-CAM++)
 
 ```bash
 # Generate SHAP frequency-band analysis
-python src/compute_shap.py
-python src/compute_shap_errors.py
+python src/xai/compute_shap.py
+python src/xai/compute_shap_errors.py
 
 # Compute and visualize Grad-CAM++ maps
-python src/compute_xai.py
-python src/generate_xai.py
+python src/xai/compute_xai.py
+python src/xai/generate_xai.py
 ```
 
 ---

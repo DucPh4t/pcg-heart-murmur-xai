@@ -4,23 +4,44 @@ import sys
 import numpy as np
 import torch
 
-SRC_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, SRC_DIR)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.dirname(SCRIPT_DIR)
+CORE_DIR = os.path.join(SRC_DIR, "core")
 
-import config as cfg
-from dataset import HeartMurmurDataset, get_patient_info
-from evaluate import infer_ensemble, infer_model, load_fold_norm_stats, load_model
-from experiment_utils import (
-    RANDOM_STATE,
-    compute_physionet_wa,
-    energy_from_logits,
-    get_or_create_split,
-    indices_for_patients,
-    predict_with_unknown_threshold,
-    set_seed,
-    sweep_entropy_threshold,
-    sweep_unknown_score_threshold,
-)
+for p in [SRC_DIR, CORE_DIR, SCRIPT_DIR]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
+try:
+    from core import config as cfg
+    from core.dataset import HeartMurmurDataset, get_patient_info
+    from core.experiment_utils import (
+        RANDOM_STATE,
+        compute_physionet_wa,
+        energy_from_logits,
+        get_or_create_split,
+        indices_for_patients,
+        predict_with_unknown_threshold,
+        set_seed,
+        sweep_entropy_threshold,
+        sweep_unknown_score_threshold,
+    )
+    from baseline.evaluate import infer_ensemble, infer_model, load_fold_norm_stats, load_model
+except (ImportError, ValueError):
+    import config as cfg
+    from dataset import HeartMurmurDataset, get_patient_info
+    from experiment_utils import (
+        RANDOM_STATE,
+        compute_physionet_wa,
+        energy_from_logits,
+        get_or_create_split,
+        indices_for_patients,
+        predict_with_unknown_threshold,
+        set_seed,
+        sweep_entropy_threshold,
+        sweep_unknown_score_threshold,
+    )
+    from evaluate import infer_ensemble, infer_model, load_fold_norm_stats, load_model
 
 
 def collect_oof_logits(dataset, split, patient_indices_map, device):

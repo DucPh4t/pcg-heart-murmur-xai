@@ -8,29 +8,57 @@ import torch.nn.functional as F
 from sklearn.metrics import classification_report
 from torch.utils.data import DataLoader
 
-SRC_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, SRC_DIR)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.dirname(SCRIPT_DIR)
+CORE_DIR = os.path.join(SRC_DIR, "core")
+BASELINE_DIR = os.path.join(SRC_DIR, "baseline")
 
-import config as cfg
-from dataset import (
-    HeartMurmurDataset,
-    PatientMurmurBagDataset,
-    get_patient_info,
-    load_normalization_stats,
-    patient_bag_collate,
-)
-from evaluate import CLASS_NAMES, plot_confusion_matrix, threshold_for_json
-from experiment_utils import (
-    NUM_FOLDS,
-    RANDOM_STATE,
-    bootstrap_metric_ci,
-    compute_physionet_wa,
-    get_or_create_split,
-    predict_with_unknown_threshold,
-    set_seed,
-    sweep_entropy_threshold,
-)
-from model import get_patient_mil_model
+for p in [SRC_DIR, CORE_DIR, BASELINE_DIR, SCRIPT_DIR]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
+try:
+    from core import config as cfg
+    from core.dataset import (
+        HeartMurmurDataset,
+        PatientMurmurBagDataset,
+        get_patient_info,
+        load_normalization_stats,
+        patient_bag_collate,
+    )
+    from core.experiment_utils import (
+        NUM_FOLDS,
+        RANDOM_STATE,
+        bootstrap_metric_ci,
+        compute_physionet_wa,
+        get_or_create_split,
+        predict_with_unknown_threshold,
+        set_seed,
+        sweep_entropy_threshold,
+    )
+    from core.model import get_patient_mil_model
+    from baseline.evaluate import CLASS_NAMES, plot_confusion_matrix, threshold_for_json
+except (ImportError, ValueError):
+    import config as cfg
+    from dataset import (
+        HeartMurmurDataset,
+        PatientMurmurBagDataset,
+        get_patient_info,
+        load_normalization_stats,
+        patient_bag_collate,
+    )
+    from experiment_utils import (
+        NUM_FOLDS,
+        RANDOM_STATE,
+        bootstrap_metric_ci,
+        compute_physionet_wa,
+        get_or_create_split,
+        predict_with_unknown_threshold,
+        set_seed,
+        sweep_entropy_threshold,
+    )
+    from model import get_patient_mil_model
+    from evaluate import CLASS_NAMES, plot_confusion_matrix, threshold_for_json
 
 
 def mil_norm_stats_path(fold_idx):

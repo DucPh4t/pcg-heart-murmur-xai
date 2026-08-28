@@ -7,19 +7,36 @@ import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
-SRC_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, SRC_DIR)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.dirname(SCRIPT_DIR)
+CORE_DIR = os.path.join(SRC_DIR, "core")
 
-import config as cfg
-from dataset import (
-    HeartMurmurDataset,
-    PatientMurmurBagDataset,
-    get_patient_info,
-    load_normalization_stats,
-    patient_bag_collate,
-)
-from experiment_utils import NUM_FOLDS, RANDOM_STATE, get_or_create_split, set_seed
-from model import get_patient_mil_model
+for p in [SRC_DIR, CORE_DIR, SCRIPT_DIR]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
+try:
+    from core import config as cfg
+    from core.dataset import (
+        HeartMurmurDataset,
+        PatientMurmurBagDataset,
+        get_patient_info,
+        load_normalization_stats,
+        patient_bag_collate,
+    )
+    from core.experiment_utils import NUM_FOLDS, RANDOM_STATE, get_or_create_split, set_seed
+    from core.model import get_patient_mil_model
+except (ImportError, ValueError):
+    import config as cfg
+    from dataset import (
+        HeartMurmurDataset,
+        PatientMurmurBagDataset,
+        get_patient_info,
+        load_normalization_stats,
+        patient_bag_collate,
+    )
+    from experiment_utils import NUM_FOLDS, RANDOM_STATE, get_or_create_split, set_seed
+    from model import get_patient_mil_model
 
 
 CLASS_NAMES = {0: "Absent", 1: "Present", 2: "Unknown"}

@@ -3,9 +3,12 @@ import torch.nn as nn
 from torchvision.models import resnet18, ResNet18_Weights
 
 try:
-    import config as cfg
+    from . import config as cfg
 except Exception:
-    cfg = None
+    try:
+        import config as cfg
+    except Exception:
+        cfg = None
 
 class ChannelAttention(nn.Module):
     def __init__(self, in_channels, reduction=16):

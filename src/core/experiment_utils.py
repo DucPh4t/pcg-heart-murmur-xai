@@ -8,7 +8,10 @@ import torch
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import StratifiedKFold, train_test_split
 
-import config as cfg
+try:
+    from . import config as cfg
+except (ImportError, ValueError):
+    import config as cfg
 
 
 NUM_FOLDS = 5

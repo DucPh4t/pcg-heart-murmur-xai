@@ -12,8 +12,9 @@ Central config for the 3-class FGA experiment (Present / Unknown / Absent).
 import os
 
 # Paths
-BASE_DIR       = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT   = os.path.dirname(BASE_DIR)
+CORE_DIR       = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR        = os.path.dirname(CORE_DIR)
+PROJECT_ROOT   = os.path.dirname(SRC_DIR)
 DATA_DIR       = os.path.join(PROJECT_ROOT, "data", "raw", "training_data")
 CSV_PATH       = os.path.join(PROJECT_ROOT, "data", "raw", "training_data.csv")
 CHECKPOINT_DIR = os.path.join(PROJECT_ROOT, "checkpoints")

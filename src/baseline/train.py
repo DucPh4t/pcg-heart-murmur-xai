@@ -8,29 +8,54 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, Subset
 from tqdm import tqdm
 
-SRC_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, SRC_DIR)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.dirname(SCRIPT_DIR)
+CORE_DIR = os.path.join(SRC_DIR, "core")
 
-import config as cfg
-from dataset import (
-    HeartMurmurDataset,
-    compute_normalization_stats,
-    get_patient_info,
-    load_normalization_stats,
-)
-from experiment_utils import (
-    NUM_FOLDS,
-    RANDOM_STATE,
-    aggregate_patient_probs,
-    compute_physionet_wa,
-    get_or_create_split,
-    indices_for_patients,
-    seed_worker,
-    set_seed,
-)
-from model import get_model
+for p in [SRC_DIR, CORE_DIR, SCRIPT_DIR]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
-CV_FOLDS     = NUM_FOLDS
+try:
+    from core import config as cfg
+    from core.dataset import (
+        HeartMurmurDataset,
+        compute_normalization_stats,
+        get_patient_info,
+        load_normalization_stats,
+    )
+    from core.experiment_utils import (
+        NUM_FOLDS,
+        RANDOM_STATE,
+        aggregate_patient_probs,
+        compute_physionet_wa,
+        get_or_create_split,
+        indices_for_patients,
+        seed_worker,
+        set_seed,
+    )
+    from core.model import get_model
+except (ImportError, ValueError):
+    import config as cfg
+    from dataset import (
+        HeartMurmurDataset,
+        compute_normalization_stats,
+        get_patient_info,
+        load_normalization_stats,
+    )
+    from experiment_utils import (
+        NUM_FOLDS,
+        RANDOM_STATE,
+        aggregate_patient_probs,
+        compute_physionet_wa,
+        get_or_create_split,
+        indices_for_patients,
+        seed_worker,
+        set_seed,
+    )
+    from model import get_model
+
+CV_FOLDS = NUM_FOLDS
 
 class FocalLoss(nn.Module):
     """

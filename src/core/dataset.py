@@ -11,8 +11,13 @@ import numpy as np
 import librosa
 import torch
 from torch.utils.data import Dataset, WeightedRandomSampler
-import config as config
-from utils import butter_bandpass_filter
+
+try:
+    from . import config as config
+    from .utils import butter_bandpass_filter
+except (ImportError, ValueError):
+    import config as config
+    from utils import butter_bandpass_filter
 
 
 class HeartMurmurDataset(Dataset):

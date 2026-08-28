@@ -8,29 +8,57 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-SRC_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, SRC_DIR)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SRC_DIR = os.path.dirname(SCRIPT_DIR)
+CORE_DIR = os.path.join(SRC_DIR, "core")
+BASELINE_DIR = os.path.join(SRC_DIR, "baseline")
 
-import config as cfg
-from dataset import (
-    HeartMurmurDataset,
-    PatientMurmurBagDataset,
-    compute_normalization_stats,
-    get_patient_info,
-    load_normalization_stats,
-    patient_bag_collate,
-)
-from experiment_utils import (
-    NUM_FOLDS,
-    RANDOM_STATE,
-    compute_physionet_wa,
-    get_or_create_split,
-    indices_for_patients,
-    seed_worker,
-    set_seed,
-)
-from model import get_patient_mil_model
-from train import FocalLoss
+for p in [SRC_DIR, CORE_DIR, BASELINE_DIR, SCRIPT_DIR]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
+try:
+    from core import config as cfg
+    from core.dataset import (
+        HeartMurmurDataset,
+        PatientMurmurBagDataset,
+        compute_normalization_stats,
+        get_patient_info,
+        load_normalization_stats,
+        patient_bag_collate,
+    )
+    from core.experiment_utils import (
+        NUM_FOLDS,
+        RANDOM_STATE,
+        compute_physionet_wa,
+        get_or_create_split,
+        indices_for_patients,
+        seed_worker,
+        set_seed,
+    )
+    from core.model import get_patient_mil_model
+    from core.utils import FocalLoss
+except (ImportError, ValueError):
+    import config as cfg
+    from dataset import (
+        HeartMurmurDataset,
+        PatientMurmurBagDataset,
+        compute_normalization_stats,
+        get_patient_info,
+        load_normalization_stats,
+        patient_bag_collate,
+    )
+    from experiment_utils import (
+        NUM_FOLDS,
+        RANDOM_STATE,
+        compute_physionet_wa,
+        get_or_create_split,
+        indices_for_patients,
+        seed_worker,
+        set_seed,
+    )
+    from model import get_patient_mil_model
+    from utils import FocalLoss
 
 
 CV_FOLDS = NUM_FOLDS
